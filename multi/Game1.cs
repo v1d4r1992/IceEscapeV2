@@ -21,6 +21,7 @@ namespace multi
 
 		Vector2? p = null;
 		Vector2 foraword = new Vector2(-1,0);
+		int CurrAngle = 0;
 
 		public Game1()
 		{
@@ -86,8 +87,15 @@ namespace multi
 
 			if (mouse.LeftButton == ButtonState.Pressed)
 			{
-					p = foraword;
+				p = foraword;
 
+				v = (position - pointToClickSim);
+				v.Normalize();
+				CurrAngle++;
+
+				double angle = MathHelper.ToDegrees((float)Math.Acos(Vector2.Dot(v, (Vector2)p)));
+
+				CurrAngle = (int)angle;
 			}
 
 
@@ -99,15 +107,18 @@ namespace multi
 
 				v = (position - pointToClickSim);
 				v.Normalize();
-
+				CurrAngle--;
 
 				double angle = MathHelper.ToDegrees((float)Math.Acos(Vector2.Dot(v, (Vector2)p)));
 
-			/*	float dot = Vector2.Dot((Vector2)p, v);
-				double det = p.Value.X * v.Y - p.Value.Y * v.X;
-				double angle = Math.Atan2(p.Value.Y-v.Y, p.Value.X- v.X);*/
+				/*	float dot = Vector2.Dot((Vector2)p, v);
+					double det = p.Value.X * v.Y - p.Value.Y * v.X;
+					double angle = Math.Atan2(p.Value.Y-v.Y, p.Value.X- v.X);*/
 
-				position -= Rotate((Vector2)p, (float)angle);
+				if ((float)CurrAngle - (int)angle < angle)
+				{
+					position -= Rotate((Vector2)p, (float)CurrAngle - (int)angle);
+				}
 			//	Vector
 
 				Window.Title = angle.ToString() +" "+ Rotate((Vector2)p, (float)angle);
